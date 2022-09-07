@@ -14,10 +14,10 @@ public class EventBusRabbitMQProducer {
     private readonly ILogger<EventBusRabbitMQProducer> _logger;
     private readonly Int32 _retryCount;
 
-    public EventBusRabbitMQProducer(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQProducer> logger, Int32 retryCount) {
-        this._persistentConnection = persistentConnection;
-        this._logger = logger;
-        this._retryCount = retryCount;
+    public EventBusRabbitMQProducer(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQProducer> logger, Int32 retryCount = 5) {
+        _persistentConnection = persistentConnection;
+        _logger = logger;
+        _retryCount = retryCount;
     }
 
     public void Publish(String queueName, IEvent @event) {

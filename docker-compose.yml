@@ -4,15 +4,18 @@ services:
   sourcingdb:
     image: mongo
 
+  rabbitmq:
+    image: rabbitmq:3-management
+
   esourcing.sourcing:
     image: ${DOCKER_REGISTRY-}esourcingsourcing
     build:
       context: .
-      dockerfile: ESourcing.Sourcing/Dockerfile
+      dockerfile: src/Services/ESourcing.Sourcing/Dockerfile
 
   esourcing.products:
     image: ${DOCKER_REGISTRY-}esourcingproducts
     build:
       context: .
-      dockerfile: ESourcing.Products/Dockerfile
+      dockerfile: src/Services/ESourcing.Products/Dockerfile
 

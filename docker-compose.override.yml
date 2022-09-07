@@ -3,33 +3,46 @@ version: '3.4'
 services:
   sourcingdb:
     container_name: sourcingdb
-    #restart: always
+    restart: always
     volumes:
       - ${WEBAPP_STORAGE_HOME}/site:/data/db
     ports:
       - "27017:27017"
+
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   esourcing.sourcing:
     container_name: esourcingsourcing
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_URLS=https://+:443;http://+:80
       - "SourcingDatabaseSettings:ConnectionString=mongodb://sourcingdb:27017"
+      - "ProductDatabaseSettings:ConnectionString=mongodb://sourcingdb:27017"
+      - "EventBus:HostName=rabbitmq"
     depends_on:
       - sourcingdb
+      - rabbitmq
     ports:
+      - "80"
       - "8001:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   esourcing.products:
     container_name: esourcingproducts
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - "ProductDatabaseSettings:ConnectionString=mongodb://sourcingdb:27017"
     depends_on:
       - sourcingdb
     ports:
+      - "80"
       - "8000:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

@@ -1,5 +1,7 @@
-﻿namespace EventBusRabbitMQ.Events;
-public class OrderCreateEvent {
+﻿using EventBusRabbitMQ.Events.Abstracts;
+
+namespace EventBusRabbitMQ.Events;
+public class OrderCreateEvent : IEvent {
     public String Id { get; set; }
     public String AuctionId { get; set; }
     public String ProductId { get; set; }

@@ -9,17 +9,16 @@ using System.Net.Sockets;
 namespace EventBusRabbitMQ;
 
 public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection {
-    private readonly IConnectionFactory _ConnectionFactory;
+    private readonly IConnectionFactory _connectionFactory;
     private IConnection _connection;
     private readonly Int32 _retryCount;
     private Boolean _disposed;
     private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
 
-    public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, Int32 retryCount, Boolean disposed, ILogger<DefaultRabbitMQPersistentConnection> logger) {
-        this._ConnectionFactory = connectionFactory;
-        this._retryCount = retryCount;
-        this._disposed = disposed;
-        this._logger = logger;
+    public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, Int32 retryCount, ILogger<DefaultRabbitMQPersistentConnection> logger) {
+        _connectionFactory = connectionFactory;
+        _retryCount = retryCount;
+        _logger = logger;
     }
 
     public Boolean IsConnected {
@@ -28,7 +27,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
         }
     }
     public Boolean TryConnect() {
-        //_logger.LogInformation("RabbitMQ Client is trying to connect");
+        _logger.LogInformation("RabbitMQ Client is trying to connect");
 
         var policy = RetryPolicy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
@@ -37,7 +36,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
             });
 
         policy.Execute(() => {
-            _connection = _ConnectionFactory.CreateConnection();
+            _connection = _connectionFactory.CreateConnection();
         });
 
         if(IsConnected) {
@@ -48,7 +47,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
             _logger.LogInformation($"RabbitMQ Client acquired a persistent connection to '{_connection.KnownHosts}' and is subscribed to failure events");
 
             return true;
-        }else {
+        } else {
             _logger.LogCritical("FATAL ERROR: RABBİTMQ connections could not be created and opened");
             return false;
         }
@@ -88,7 +87,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
 
         return _connection.CreateModel();
     }
-    
+
     public void Dispose() {
         if(_disposed)
             return;
