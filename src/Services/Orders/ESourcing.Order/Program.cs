@@ -1,6 +1,7 @@
 using ESourcing.Order.Extensions;
 using Microsoft.OpenApi.Models;
 using Orders.Infrastructure;
+using Orders.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 //var x = MigrationManager.MigrateDatabase();
@@ -13,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(s => {
     s.SwaggerDoc("v1",
         new OpenApiInfo {
-            Title = "Esourcing.Order",
+            Title = "Order API",
             Version = "v1"
         });
 });
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen(s => {
 
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 //builder.Services.MigrateDatabase();
 
 builder.Services.AddHttpContextAccessor();
@@ -32,7 +34,7 @@ app.MigrateDatabase();
 // Configure the HTTP request pipeline.
 if(app.Environment.IsDevelopment()) {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Order API v1"));
 }
 
 app.UseHttpsRedirection();

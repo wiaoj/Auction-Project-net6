@@ -15,25 +15,25 @@ public class OrderContextSeed {
             new() {
                 AuctionId = $"{Guid.NewGuid()}",
                 ProductId = $"{Guid.NewGuid()}",
-                SellerUserName = "test1@test.com",
+                SellerUserName = "test@test.com",
                 UnitPrice = 10,
-                TotalPrice = 1000,
+                TotalPrice = 1_000,
                 CreateAt = DateTime.UtcNow
             },
             new() {
                 AuctionId = $"{Guid.NewGuid()}",
                 ProductId = $"{Guid.NewGuid()}",
-                SellerUserName = "test1@test.com",
+                SellerUserName = "test@test.com",
                 UnitPrice = 10,
-                TotalPrice = 120000,
+                TotalPrice = 120_000,
                 CreateAt = DateTime.UtcNow
             },
             new() {
                 AuctionId = $"{Guid.NewGuid()}",
                 ProductId = $"{Guid.NewGuid()}",
-                SellerUserName = "test1@test.com",
+                SellerUserName = "test@test.com",
                 UnitPrice = 10,
-                TotalPrice = 9990000,
+                TotalPrice = 9_999_999,
                 CreateAt = DateTime.UtcNow
             }
         };
